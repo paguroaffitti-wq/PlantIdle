@@ -34,7 +34,9 @@
 
 | File | URL raw | Scopo | Script collegato | Stato |
 |------|---------|-------|-----------------|-------|
-| `game/main.tscn` | `[BASE]game/main.tscn` | Scena principale: UI, pianta singola, pulsanti annaffia/raccogli | `game/scripts/main.gd` | ✅ M0 |
+| `game/main.tscn` | `[BASE]game/main.tscn` | Scena giardino: sfondo, label semi globale, HBoxContainer per N piante | `game/scripts/main.gd` | ✅ M1.1 |
+| `game/scenes/pianta.tscn` | `[BASE]game/scenes/pianta.tscn` | Componente pianta riutilizzabile (sprite, barra, pulsanti annaffia/raccogli) | `game/scripts/pianta.gd` | ✅ M1.1 |
+
 
 > **Milestone 1 aggiungerà:**
 > - `game/scenes/pianta.tscn` — componente pianta riutilizzabile
@@ -47,7 +49,9 @@
 
 | File | URL raw | Scopo | Funzioni chiave | Stato |
 |------|---------|-------|----------------|-------|
-| `game/scripts/main.gd` | `[BASE]game/scripts/main.gd` | Logica completa M0: pianta singola, annaffia, raccogli, salvataggio, crescita offline | `_ready()`, `_su_annaffia_premuto()`, `aggiungi_acqua()`, `salva_dati()`, `carica_dati()` | ✅ M0 |
+| `game/scripts/main.gd` | `[BASE]game/scripts/main.gd` | Giardino: istanzia N piante, gestisce semi globali, salva/carica stato | `_ready()`, `_su_raccolta_effettuata()`, `salva_dati()`, `carica_dati()` | ✅ M1.1 |
+| `game/scripts/pianta.gd` | `[BASE]game/scripts/pianta.gd` | Logica singola pianta come componente autonomo. Emette segnali al giardino. | `carica_stato()`, `ottieni_stato()`, `applica_crescita_passiva()`, `aggiungi_acqua()` | ✅ M1.1 |
+
 
 > **Milestone 1 aggiungerà:**
 > - `game/scripts/pianta.gd` — logica singola pianta (componente autonomo)

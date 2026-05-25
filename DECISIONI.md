@@ -59,7 +59,28 @@
 - **Decisione:** GitHub Desktop per commit/push quotidiani, Git Bash solo per operazioni avanzate
 - **Motivazione:** GitHub Desktop è più semplice e visivo. Git Bash resta disponibile per operazioni non supportate da Desktop (es. git rm --cached).
 
+### #009 - Architettura piante: componenti autonomi con segnali
+- **Data:** Maggio 2026
+- **Decisione:** Ogni pianta è una scena/script autonomo (`pianta.tscn` + `pianta.gd`). 
+  Non conosce il giardino: comunica via segnali (`raccolta_effettuata`, `stato_cambiato`). 
+  Il giardino (`main.gd`) ascolta e gestisce stato globale e salvataggio.
+- **Alternative considerate:** Tenere tutto in main.gd con array di stati piante (no scena pianta separata)
+- **Motivazione:** Modulo riutilizzabile, ogni pianta gestisce la sua UI inline (necessario con N piante: 
+  pulsanti globali sarebbero ambigui). I segnali permettono di agganciare nuovi sistemi (missioni, 
+  statistiche, achievement) senza toccare il codice della pianta.
+
+### #010 - Salvataggio: nuovo formato versionato, vecchio M0 scartato
+- **Data:** Maggio 2026
+- **Decisione:** Nuovo JSON con campo `versione: 1` e array `piante`. I save M0 (senza campo versione) 
+  vengono ignorati silenziosamente al primo avvio.
+- **Alternative considerate:** Migrazione automatica del save M0 a M1
+- **Motivazione:** In M1 sono io l'unico tester, non vale la pena scrivere codice di migrazione. 
+  Il campo `versione` è già pronto per future migrazioni quando avremo utenti reali.
+
+
 ---
+
+
 
 ## TEMPLATE PER NUOVE DECISIONI
 

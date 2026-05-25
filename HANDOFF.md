@@ -97,9 +97,9 @@ Pubblicare una v1.0 funzionante in 8-12 mesi, vedere se la gente gioca, e solo s
 - Testato su PC Windows, funzionante
 - Repository GitHub configurata e pulita
 
-### Milestone 1 — Loop base multi-pianta 🔲 IN PARTENZA
-- **Step 1:** Refactoring per gestire più piante (3-6 vasi in griglia)
-- **Step 2:** Tipi di pianta diversi (pothos, pachira, monstera) con stats diverse
+### Milestone 1 — Loop base multi-pianta 🔲 IN CORSO
+- **Step 1:** Refactoring per gestire più piante (3-6 vasi in griglia) ✅ COMPLETATO
+- **Step 2:** Tipi di pianta diversi (pothos, pachira, monstera) con stats diverse 🔲 PROSSIMO
 - **Step 3:** Sistema shop + valuta (vendi foglie → monete → compra piante/vasi)
 - **Step 4:** Prima estetica con asset temporanei stilizzati
 
@@ -153,9 +153,8 @@ Pubblicare una v1.0 funzionante in 8-12 mesi, vedere se la gente gioca, e solo s
 
 ## 📝 STATO ATTUALE
 
-**Ultima milestone completata:** Milestone 0 ✅
-**Prossimo step:** Milestone 1, Step 1 — refactoring multi-pianta
-**Data ultimo aggiornamento:** Maggio 2026
+**Ultima milestone completata:** Milestone 1 Step 1 ✅
+**Prossimo step:** Milestone 1, Step 2 — tipi di pianta diversi
 
 **Come iniziare la prossima sessione:**
 1. Apri nuova conversazione con Claude
