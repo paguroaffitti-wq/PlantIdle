@@ -1,87 +1,126 @@
-# 📂 CODEMAP - Indice File del Progetto
+# 📂 CODEMAP - Indice File del Progetto PlantIdle
 
-> **A cosa serve questo file:** è la mappa del progetto. Quando lavori con un'AI, condividi questo file e l'AI saprà esattamente quale file aprire per quale compito. Aggiornato a ogni milestone.
+> **A cosa serve:** mappa completa di tutti i file del progetto. Condividila con Claude all'inizio di ogni chat — l'AI saprà quale file aprire per quale compito senza doverlo cercare.
 >
-> **Convenzione URL:** sostituire `[REPO]` con l'URL base della repo GitHub (es. `https://raw.githubusercontent.com/tuonome/PiantaCrescente/main/`)
+> **URL base raw GitHub:**
+> `https://raw.githubusercontent.com/paguroaffitti-wq/PlantIdle/main/`
+>
+> **Come usare gli URL:** sostituisci `[BASE]` con l'URL base qui sopra.
 
 ---
 
-## 🎯 FILE CHIAVE (da consultare per primi)
+## 🎯 DOCUMENTI DI PROGETTO (root repo)
 
-| File | URL | Scopo |
-|------|-----|-------|
-| `HANDOFF.md` | `[REPO]/HANDOFF.md` | Stato e piano del progetto |
-| `CODEMAP.md` | `[REPO]/CODEMAP.md` | Questo file - mappa del codice |
-| `DECISIONI.md` | `[REPO]/DECISIONI.md` | Log decisioni importanti |
+| File | URL raw | Scopo |
+|------|---------|-------|
+| `HANDOFF.md` | `[BASE]HANDOFF.md` | Stato completo del progetto, piano, profilo sviluppatore |
+| `CODEMAP.md` | `[BASE]CODEMAP.md` | Questo file — mappa di tutti i file |
+| `DECISIONI.md` | `[BASE]DECISIONI.md` | Log decisioni importanti e motivazioni |
+| `README.md` | `[BASE]README.md` | Presentazione pubblica del progetto su GitHub |
+| `.gitignore` | `[BASE].gitignore` | File e cartelle ignorati da Git |
 
 ---
 
-## ⚙️ CONFIGURAZIONE PROGETTO
+## ⚙️ CONFIGURAZIONE GODOT (game/)
 
-| File | URL | Scopo | Stato |
-|------|-----|-------|-------|
-| `project.godot` | `[REPO]/project.godot` | Configurazione Godot 4.3 - risoluzione, orientamento, scena principale | ✅ Milestone 0 |
-| `icon.svg` | `[REPO]/icon.svg` | Icona placeholder del progetto | ✅ Milestone 0 |
+| File | URL raw | Scopo | Stato |
+|------|---------|-------|-------|
+| `game/project.godot` | `[BASE]game/project.godot` | Config Godot: risoluzione 480x800, orientamento portrait, scena principale | ✅ M0 |
+| `game/icon.svg` | `[BASE]game/icon.svg` | Icona placeholder del progetto | ✅ M0 |
 
 ---
 
 ## 🎬 SCENE GODOT (file .tscn)
 
-| File | URL | Scopo | Script collegato | Stato |
-|------|-----|-------|------------------|-------|
-| `main.tscn` | `[REPO]/main.tscn` | Scena principale, contiene UI e pianta singola | `scripts/main.gd` | ✅ Milestone 0 |
+| File | URL raw | Scopo | Script collegato | Stato |
+|------|---------|-------|-----------------|-------|
+| `game/main.tscn` | `[BASE]game/main.tscn` | Scena principale: UI, pianta singola, pulsanti annaffia/raccogli | `game/scripts/main.gd` | ✅ M0 |
+
+> **Milestone 1 aggiungerà:**
+> - `game/scenes/pianta.tscn` — componente pianta riutilizzabile
+> - `game/scenes/giardino.tscn` — scena principale con griglia multi-pianta
+> - `game/scenes/shop.tscn` — interfaccia negozio
 
 ---
 
 ## 💻 SCRIPT GDSCRIPT (file .gd)
 
-| File | URL | Scopo principale | Funzioni chiave | Stato |
-|------|-----|------------------|-----------------|-------|
-| `scripts/main.gd` | `[REPO]/scripts/main.gd` | Logica completa Milestone 0: pianta singola, annaffia, raccogli, salvataggio, crescita offline | `_ready()`, `_su_annaffia_premuto()`, `aggiungi_acqua()`, `salva_dati()`, `carica_dati()` | ✅ Milestone 0 |
+| File | URL raw | Scopo | Funzioni chiave | Stato |
+|------|---------|-------|----------------|-------|
+| `game/scripts/main.gd` | `[BASE]game/scripts/main.gd` | Logica completa M0: pianta singola, annaffia, raccogli, salvataggio, crescita offline | `_ready()`, `_su_annaffia_premuto()`, `aggiungi_acqua()`, `salva_dati()`, `carica_dati()` | ✅ M0 |
+
+> **Milestone 1 aggiungerà:**
+> - `game/scripts/pianta.gd` — logica singola pianta (componente autonomo)
+> - `game/scripts/giardino.gd` — gestione griglia piante, UI, salvataggio
+> - `game/scripts/dati_piante.gd` — database tipi di pianta (pothos, pachira, monstera...)
+> - `game/scripts/shop.gd` — logica negozio e acquisti
 
 ---
 
-## 🎨 ASSET
+## 🎨 ASSET (da aggiungere nelle milestone successive)
 
-| Cartella | URL | Contenuto | Stato |
-|----------|-----|-----------|-------|
-| `assets/piante/` | `[REPO]/assets/piante/` | Illustrazioni piante (vari stadi) | 🔲 Milestone 3 |
-| `assets/ui/` | `[REPO]/assets/ui/` | Elementi interfaccia (pulsanti, icone) | 🔲 Milestone 2-3 |
-| `assets/audio/` | `[REPO]/assets/audio/` | Musica lofi e effetti sonori | 🔲 Milestone 2 |
-
----
-
-## 📚 DOCUMENTAZIONE
-
-| File | URL | Scopo |
-|------|-----|-------|
-| `docs/milestone_0_completata.md` | `[REPO]/docs/milestone_0_completata.md` | Riepilogo cosa è stato fatto in Milestone 0 |
+| Cartella | Contenuto previsto | Milestone |
+|----------|--------------------|-----------|
+| `game/assets/piante/` | Illustrazioni piante in vari stadi di crescita (PNG trasparente) | M3 |
+| `game/assets/ui/` | Pulsanti, icone, sfondi UI | M2-M3 |
+| `game/assets/audio/` | Musica lofi + effetti sonori | M2 |
+| `game/assets/fonts/` | Font carino per UI | M2 |
 
 ---
 
-## 🗺️ COME USARE QUESTO FILE CON L'AI
+## 🗺️ WORKFLOW CON CLAUDE
 
-Quando inizi una nuova conversazione:
+### Inizio sessione (ogni nuova chat)
+```
+1. Incolla HANDOFF.md
+2. Incolla CODEMAP.md
+3. Di' quale step vuoi fare
+4. Claude chiede i file specifici che servono
+5. Fornisci gli URL raw dei file richiesti
+```
 
-1. Condividi `HANDOFF.md` per il contesto generale del progetto
-2. Condividi `CODEMAP.md` per far sapere all'AI cosa c'è dove
-3. L'AI ti chiederà i file specifici di cui ha bisogno (es. *"per Milestone 1 Step 1 ho bisogno di vedere il contenuto di `scripts/main.gd`"*)
-4. Tu condividi l'URL del file richiesto e l'AI lo legge
+### Esempio prompt iniziale efficace
+> *"Ciao Claude. Ti allego HANDOFF e CODEMAP del progetto PlantIdle. Repo: https://github.com/paguroaffitti-wq/PlantIdle. Sono pronto per Milestone 1 Step 1 — refactoring multi-pianta. Dimmi quali file ti servono."*
 
-**Esempio di prompt iniziale efficace:**
-> *"Ciao Claude, ti condivido l'HANDOFF e la CODEMAP del progetto. Sono pronto a partire con Milestone 1 Step 1. Dimmi quali file ti serve vedere e te li condivido."*
+### URL raw pronti da copiare (Milestone 0)
+```
+Script principale:
+https://raw.githubusercontent.com/paguroaffitti-wq/PlantIdle/main/game/scripts/main.gd
+
+Scena principale:
+https://raw.githubusercontent.com/paguroaffitti-wq/PlantIdle/main/game/main.tscn
+
+Configurazione progetto:
+https://raw.githubusercontent.com/paguroaffitti-wq/PlantIdle/main/game/project.godot
+```
 
 ---
 
 ## 📝 CONVENZIONI DI NAMING
 
-- **Snake_case** per file Godot (`main.tscn`, `pianta.gd`) - convenzione Godot standard
-- **PascalCase** per nodi nelle scene (`PulsanteAnnaffia`, `BarraCrescita`) - convenzione Godot standard
-- **snake_case** per variabili e funzioni in GDScript (`acqua_attuale`, `salva_dati()`)
-- **SCREAMING_SNAKE_CASE** per costanti (`ACQUA_PER_TAP`, `FILE_SALVATAGGIO`)
-- **Italiano** per nomi di variabili/funzioni di game logic (rende il codice leggibile a un eventuale collaboratore italiano)
-- **Inglese** per termini tecnici di engine (`_ready`, `connect`, `pressed`, ecc.) - obbligatorio
+| Tipo | Convenzione | Esempio |
+|------|-------------|---------|
+| File Godot | snake_case | `pianta.gd`, `dati_piante.gd` |
+| Nodi nelle scene | PascalCase | `PulsanteAnnaffia`, `BarraCrescita` |
+| Variabili e funzioni | snake_case | `acqua_attuale`, `salva_dati()` |
+| Costanti | SCREAMING_SNAKE_CASE | `ACQUA_PER_TAP`, `FILE_SALVATAGGIO` |
+| Lingua variabili game logic | Italiano | `acqua_attuale`, `semi` |
+| Lingua termini engine | Inglese | `_ready()`, `connect()`, `pressed` |
 
 ---
 
-**Ultimo aggiornamento:** Milestone 0 completata
+## 📊 STATO MILESTONE
+
+| Milestone | Descrizione | Stato |
+|-----------|-------------|-------|
+| M0 | Prototipo pianta singola | ✅ Completata |
+| M1 | Loop base multi-pianta + shop | 🔲 In partenza |
+| M2 | Progressione e contenuti | 🔲 |
+| M3 | Asset finali con AI | 🔲 |
+| M4 | Mobile readiness | 🔲 |
+| M5 | Monetizzazione | 🔲 |
+| M6 | Pubblicazione Google Play | 🔲 |
+
+---
+
+*Ultimo aggiornamento: Maggio 2026 — Milestone 0 completata*

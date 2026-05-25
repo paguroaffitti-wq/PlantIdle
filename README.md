@@ -1,37 +1,50 @@
-# 🌱 PiantaCrescente
+# 🌱 PlantIdle
 
-Un cozy idle game mobile per Android, dove il giocatore colleziona e cura piante d'appartamento.
+Un cozy idle game mobile dove collezzioni e curi piante d'appartamento.
 
 ## 🎯 Stato del progetto
 
-**Fase attuale:** Milestone 1 in partenza (refactoring multi-pianta)
-**Engine:** Godot 4.3 Standard
-**Target:** Android (iOS in futuro)
-**Stile:** 2D piatto cottagecore (ispirato a Window Garden)
+| Info | Dettaglio |
+|------|-----------|
+| **Fase attuale** | Milestone 1 in partenza |
+| **Engine** | Godot 4.3 Standard |
+| **Target** | Android (iOS in futuro) |
+| **Stile** | 2D piatto cottagecore |
+| **Riferimento** | Window Garden (Cloverfi Games) |
+
+## 🌿 Concept
+
+Colleziona e cura piante d'appartamento reali — pachira, monstera, pothos, sansevieria — in un appartamento virtuale rilassante. Sblocca varietà sempre più rare, compresa qualche pianta kawaii speciale con personalità. Un angolo di verde tutto tuo.
 
 ## 📂 Documenti chiave
 
-- [HANDOFF.md](HANDOFF.md) - Riepilogo completo del progetto
-- [CODEMAP.md](CODEMAP.md) - Mappa dei file e loro scopo
-- [DECISIONI.md](DECISIONI.md) - Log delle decisioni importanti
+| File | Scopo |
+|------|-------|
+| [HANDOFF.md](HANDOFF.md) | Riepilogo completo del progetto |
+| [CODEMAP.md](CODEMAP.md) | Mappa di tutti i file e script |
+| [DECISIONI.md](DECISIONI.md) | Log delle decisioni importanti |
 
 ## 🛠️ Come aprire il progetto
 
 1. Scarica [Godot 4.3 Standard](https://godotengine.org/download/windows/) (NON .NET)
-2. Clona o scarica questa repo
-3. In Godot: **Import** → seleziona il file `project.godot`
+2. Clona questa repo
+3. In Godot: **Import** → seleziona `game/project.godot`
 4. Premi ▶ Play
 
 ## 📅 Roadmap
 
-- ✅ **Milestone 0:** Prototipo "una pianta che cresce"
-- 🔲 **Milestone 1:** Loop base multi-pianta + shop (in corso)
-- 🔲 **Milestone 2:** Progressione e contenuti
-- 🔲 **Milestone 3:** Asset finali con AI
-- 🔲 **Milestone 4:** Mobile readiness
-- 🔲 **Milestone 5:** Monetizzazione
-- 🔲 **Milestone 6:** Pubblicazione Google Play
+| Milestone | Descrizione | Stato |
+|-----------|-------------|-------|
+| M0 | Prototipo "una pianta che cresce" | ✅ Completata |
+| M1 | Loop base multi-pianta + shop | 🔲 In corso |
+| M2 | Progressione e contenuti | 🔲 |
+| M3 | Asset finali con AI | 🔲 |
+| M4 | Mobile readiness | 🔲 |
+| M5 | Monetizzazione | 🔲 |
+| M6 | Pubblicazione Google Play | 🔲 |
 
-## 📝 Note
+## 🤖 Note di sviluppo
 
-Progetto sviluppato come side hustle con assistenza AI (Claude per codice, ChatGPT per asset visivi).
+Progetto sviluppato come side hustle con assistenza AI:
+- **Claude** — codice GDScript, architettura, pianificazione
+- **ChatGPT/DALL-E** — asset visivi e illustrazioni piante

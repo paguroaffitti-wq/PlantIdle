@@ -1,68 +1,75 @@
-# 📋 LOG DELLE DECISIONI IMPORTANTI
+# 📋 LOG DELLE DECISIONI IMPORTANTI - PlantIdle
 
-> **A cosa serve:** tenere traccia delle decisioni significative prese durante lo sviluppo e del *perché* sono state prese. Quando tra 6 mesi ti chiederai "ma perché avevamo scelto X invece di Y?", la risposta sarà qui.
-
----
-
-## Formato delle entry
-
-Ogni decisione è un blocco con:
-- **Data**
-- **Decisione**
-- **Alternative considerate**
-- **Motivazione**
-- **Conseguenze attese**
+> **A cosa serve:** tenere traccia delle decisioni significative e del *perché* sono state prese. Quando tra 6 mesi ti chiederai "perché avevamo scelto X invece di Y?", la risposta è qui.
 
 ---
 
 ## DECISIONI PRESE
 
-### Decisione #001 - Game engine: Godot 4.3
+### #001 - Game engine: Godot 4.3 Standard
 - **Data:** Maggio 2026
-- **Decisione:** Usare Godot 4.3 (versione Standard, NON .NET) con linguaggio GDScript
-- **Alternative considerate:** Unity, Flutter+Flame, GameMaker, Defold, soluzioni no-code (Construct 3, GDevelop)
-- **Motivazione:** Godot è gratuito, open source, leggero, ottimo per 2D mobile, GDScript ha sintassi tipo Python più veloce da scrivere. Per un cozy idle 2D è lo strumento più adatto. Unity sarebbe overkill, gli altri hanno comunità più piccole o limitazioni.
-- **Conseguenze attese:** Risparmio di 100-150 ore di sviluppo rispetto a C# in Unity, comunità in crescita per supporto.
+- **Decisione:** Godot 4.3 Standard con GDScript
+- **Alternative considerate:** Unity, Flutter+Flame, GameMaker, Defold, no-code (Construct 3, GDevelop)
+- **Motivazione:** Gratuito, open source, zero royalty, ottimo per 2D mobile, GDScript simile a Python (più veloce da scrivere). Per un cozy idle 2D è lo strumento ideale. Unity sarebbe overkill.
 
-### Decisione #002 - Target piattaforma: Android prima, iOS dopo
+### #002 - Target piattaforma: Android prima, iOS dopo
 - **Data:** Maggio 2026
-- **Decisione:** Sviluppare e pubblicare prima per Android, valutare iOS solo se Android funziona
-- **Alternative considerate:** iOS prima (più monetizzante), entrambi insieme
-- **Motivazione:** Android costa 25$ una tantum vs 99$/anno di iOS. Sviluppatore ha già un Mac quindi iOS resta possibile, ma per validare l'idea Android basta e avanza. Strategia "validare prima di investire".
-- **Conseguenze attese:** Time-to-market più veloce, costi iniziali contenuti.
+- **Decisione:** Android first, iOS solo se Android funziona
+- **Alternative considerate:** iOS prima, entrambi insieme
+- **Motivazione:** Android = 25$ una tantum vs iOS = 99$/anno. Sviluppatore ha Mac quindi iOS resta possibile, ma prima validiamo l'idea su Android.
 
-### Decisione #003 - Stile visivo v1: 2D piatto cottagecore (NO isometrico)
+### #003 - Stile visivo v1: 2D piatto cottagecore
 - **Data:** Maggio 2026
-- **Decisione:** v1.0 sarà 2D piatto vista frontale stile Window Garden, isometrico rimandato a v2.0
+- **Decisione:** v1.0 = 2D piatto vista frontale stile Window Garden. Isometrico rimandato a v2.0.
 - **Alternative considerate:** Isometrico fin dall'inizio (stile Animal Crossing Pocket Camp)
-- **Motivazione:** Isometrico richiede 10-14 mesi part-time, 2D piatto 6-8 mesi. Validare l'idea prima con qualcosa di pubblicabile. Lo sviluppatore non ha esperienza gamedev né di pixel/illustration art isometrica.
-- **Conseguenze attese:** Pubblicazione possibile entro 8-12 mesi. Se gioco ha successo, v2.0 isometrica con eventuali entrate generate.
+- **Motivazione:** Isometrico = 10-14 mesi part-time. 2D piatto = 6-8 mesi. Validare prima con qualcosa di pubblicabile. Se il gioco ha successo, v2.0 isometrica con le entrate generate.
 
-### Decisione #004 - Stack di collaborazione AI
+### #004 - Concept piante: appartamento realistico + kawaii
 - **Data:** Maggio 2026
-- **Decisione:** Claude per codice/pianificazione/architettura, ChatGPT per generazione immagini
-- **Alternative considerate:** Solo ChatGPT, solo Claude, altri tool AI specializzati
-- **Motivazione:** Sviluppatore ha già accesso a entrambi. Divisione di responsabilità chiara sfrutta i punti di forza di ciascuno.
-- **Conseguenze attese:** Workflow chiaro, no overlap, ottimizzazione del tempo.
+- **Decisione:** Piante d'appartamento realistiche (pachira, monstera, pothos, sansevieria...) con qualche pianta kawaii speciale sbloccabile
+- **Motivazione:** Le piante d'appartamento sono in boom culturale dal 2020. Nicchia con domanda reale e poca concorrenza nel mobile gaming. Il kawaii aggiunge varietà e attrae pubblico più giovane.
 
-### Decisione #005 - Repository: GitHub pubblico con CODEMAP
+### #005 - Esperienza target: rilassante + collezionistica
 - **Data:** Maggio 2026
-- **Decisione:** Usare GitHub fin dalla Milestone 1 con file CODEMAP.md come indice
-- **Alternative considerate:** Backup manuale locale, GitHub privato, altri host (GitLab, Bitbucket)
-- **Motivazione:** GitHub pubblico permette a Claude di leggere i file via web_fetch. Versioning gratuito, backup, portfolio futuro. CODEMAP riduce token consumati per orientamento.
-- **Conseguenze attese:** Workflow di collaborazione AI più efficiente, codice sempre backuppato.
+- **Decisione:** Focus su rilassante e collezionistico. Sociale "lite" rimandato a v2.0.
+- **Motivazione:** Il sociale richiede backend, server, moderazione = 6+ mesi di lavoro extra e costi mensili. Per v1 si valuta una versione "codice condivisibile" senza server.
+
+### #006 - Stack AI: Claude + ChatGPT
+- **Data:** Maggio 2026
+- **Decisione:** Claude per codice/architettura/pianificazione, ChatGPT/DALL-E per asset visivi
+- **Motivazione:** Sviluppatore ha già accesso a entrambi. Divisione chiara che sfrutta i punti di forza di ciascuno.
+
+### #007 - Repository: GitHub pubblico con struttura documentata
+- **Data:** Maggio 2026
+- **Decisione:** GitHub pubblico con HANDOFF + CODEMAP + DECISIONI come documenti di progetto nella root
+- **Struttura scelta:**
+  ```
+  PlantIdle/          ← root repo
+  ├── .gitignore
+  ├── HANDOFF.md
+  ├── CODEMAP.md
+  ├── DECISIONI.md
+  ├── README.md
+  └── game/           ← progetto Godot
+  ```
+- **Motivazione:** GitHub pubblico permette a Claude di leggere file via URL raw. Struttura con `game/` separata dalla documentazione mantiene tutto pulito. `.gitignore` nella root ignora `.godot/` ovunque.
+
+### #008 - Tool Git: GitHub Desktop per uso quotidiano
+- **Data:** Maggio 2026
+- **Decisione:** GitHub Desktop per commit/push quotidiani, Git Bash solo per operazioni avanzate
+- **Motivazione:** GitHub Desktop è più semplice e visivo. Git Bash resta disponibile per operazioni non supportate da Desktop (es. git rm --cached).
 
 ---
 
-## TEMPLATE PER NUOVE DECISIONI (copia qui sotto)
+## TEMPLATE PER NUOVE DECISIONI
 
-### Decisione #XXX - Titolo breve
-- **Data:** 
-- **Decisione:** 
-- **Alternative considerate:** 
-- **Motivazione:** 
-- **Conseguenze attese:** 
+### #XXX - Titolo breve
+- **Data:**
+- **Decisione:**
+- **Alternative considerate:**
+- **Motivazione:**
+- **Conseguenze attese:**
 
 ---
 
-**Ultimo aggiornamento:** Maggio 2026, Milestone 0 completata
+*Ultimo aggiornamento: Maggio 2026 — Milestone 0 completata*
