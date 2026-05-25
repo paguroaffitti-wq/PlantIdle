@@ -1,0 +1,83 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1shop1d1e001"]
+
+[ext_resource type="Script" path="res://scripts/shop.gd" id="1_shop"]
+
+[node name="Shop" type="Node2D"]
+script = ExtResource("1_shop")
+
+[node name="Sfondo" type="ColorRect" parent="."]
+offset_right = 480.0
+offset_bottom = 800.0
+color = Color(0.95, 0.92, 0.85, 1)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Titolo" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 30.0
+offset_right = 460.0
+offset_bottom = 80.0
+text = "🛒 Negozio"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 30
+
+[node name="LabelSemi" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 90.0
+offset_right = 460.0
+offset_bottom = 130.0
+text = "🌱 Semi: 0"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
+
+[node name="EtichettaPiante" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 140.0
+offset_right = 460.0
+offset_bottom = 175.0
+text = "Piante da sbloccare"
+theme_override_font_sizes/font_size = 20
+
+[node name="Scroll" type="ScrollContainer" parent="UI"]
+offset_left = 20.0
+offset_top = 180.0
+offset_right = 460.0
+offset_bottom = 510.0
+horizontal_scroll_mode = 0
+
+[node name="ListaPiante" type="VBoxContainer" parent="UI/Scroll"]
+custom_minimum_size = Vector2(420, 0)
+theme_override_constants/separation = 10
+
+[node name="EtichettaVasi" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 530.0
+offset_right = 460.0
+offset_bottom = 565.0
+text = "Vasi"
+theme_override_font_sizes/font_size = 20
+
+[node name="LabelVasi" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 570.0
+offset_right = 460.0
+offset_bottom = 605.0
+text = "Vasi: 3 / 6"
+theme_override_font_sizes/font_size = 16
+
+[node name="PulsanteCompraVaso" type="Button" parent="UI"]
+offset_left = 20.0
+offset_top = 610.0
+offset_right = 460.0
+offset_bottom = 670.0
+text = "Compra vaso"
+theme_override_font_sizes/font_size = 22
+
+[node name="PulsanteIndietro" type="Button" parent="UI"]
+offset_left = 20.0
+offset_top = 700.0
+offset_right = 460.0
+offset_bottom = 770.0
+text = "← Torna al giardino"
+theme_override_font_sizes/font_size = 24

@@ -7,6 +7,7 @@ script = ExtResource("1_dati")
 id_pianta = "sansevieria"
 nome_visualizzato = "Sansevieria"
 descrizione = "Robusta e tollerante. Una scelta affidabile per ogni giardino."
+costo_sblocco = 30
 acqua_per_crescita = 100.0
 acqua_per_tap = 5.0
 acqua_passiva_al_secondo = 1.0

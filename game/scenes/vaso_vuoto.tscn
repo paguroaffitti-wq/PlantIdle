@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2vasovuoto001"]
+
+[ext_resource type="Script" path="res://scripts/vaso_vuoto.gd" id="1_vaso"]
+
+[node name="VasoVuoto" type="Control"]
+custom_minimum_size = Vector2(140, 360)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 140.0
+offset_bottom = 360.0
+script = ExtResource("1_vaso")
+
+[node name="Sfondo" type="ColorRect" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 120.0
+offset_bottom = 120.0
+color = Color(0.7, 0.7, 0.65, 0.6)
+
+[node name="Pulsante" type="Button" parent="."]
+offset_left = 10.0
+offset_top = 145.0
+offset_right = 130.0
+offset_bottom = 245.0
+text = "🌱
+Pianta
+qui"
+theme_override_font_sizes/font_size = 18
+
+[node name="LabelVuoto" type="Label" parent="."]
+offset_left = 10.0
+offset_top = 315.0
+offset_right = 130.0
+offset_bottom = 350.0
+text = "Vaso vuoto"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 16
+modulate = Color(1, 1, 1, 0.6)

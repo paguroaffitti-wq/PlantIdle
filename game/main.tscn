@@ -37,6 +37,14 @@ theme_override_font_sizes/font_size = 26
 offset_left = 20.0
 offset_top = 160.0
 offset_right = 460.0
-offset_bottom = 520.0
+offset_bottom = 540.0
 alignment = 1
 theme_override_constants/separation = 10
+
+[node name="PulsanteShop" type="Button" parent="UI"]
+offset_left = 100.0
+offset_top = 680.0
+offset_right = 380.0
+offset_bottom = 760.0
+text = "🛒 SHOP"
+theme_override_font_sizes/font_size = 32

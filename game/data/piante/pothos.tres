@@ -7,6 +7,7 @@ script = ExtResource("1_dati")
 id_pianta = "pothos"
 nome_visualizzato = "Pothos"
 descrizione = "Cresce rapida e regala spesso. La pianta perfetta per chi inizia."
+costo_sblocco = 0
 acqua_per_crescita = 60.0
 acqua_per_tap = 5.0
 acqua_passiva_al_secondo = 1.5

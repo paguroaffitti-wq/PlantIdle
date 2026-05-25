@@ -2,25 +2,24 @@ extends Control
 class_name Pianta
 
 # ============================================================
-# MILESTONE 1 STEP 2 - Pianta data-driven
+# MILESTONE 1 STEP 3 - Pianta connessa al singleton progresso
 # ============================================================
-# La pianta non ha più costanti hardcoded: legge tutto dalla
-# risorsa `dati` (DatiPianta) che il giardino le passa prima
-# di aggiungerla all'albero.
+# Rispetto a Step 2:
+# - La pianta sa il suo indice_slot per persistere lo stato
+#   direttamente nel singleton ProgressoGiocatore.
+# - I segnali "raccolta_effettuata" e "stato_cambiato" restano,
+#   ma il giardino li usa solo per UI/salvataggio.
 # ============================================================
 
-# --- SEGNALI VERSO IL GIARDINO ---
 signal raccolta_effettuata(quantita_semi: int)
 signal stato_cambiato
 
-# --- DATI DEL TIPO (assegnati dal giardino prima di _ready) ---
 var dati: DatiPianta
+var indice_slot: int = -1
 
-# --- STATO ---
 var acqua_attuale: float = 0.0
 var matura: bool = false
 
-# --- RIFERIMENTI NODI ---
 @onready var sprite: ColorRect = $Sprite
 @onready var barra: ProgressBar = $Barra
 @onready var pulsante_annaffia: Button = $PulsanteAnnaffia
@@ -28,37 +27,27 @@ var matura: bool = false
 @onready var label_nome: Label = $LabelNome
 
 
-# ============================================================
-# API PUBBLICA (chiamata dal giardino)
-# ============================================================
-
-# Il giardino DEVE chiamare questa prima di add_child().
-# In questo modo, quando arriva _ready(), dati è già disponibile.
-func imposta_dati(d: DatiPianta) -> void:
+# Il giardino DEVE chiamare questa prima di add_child()
+func imposta(d: DatiPianta, slot: int, stato: Dictionary) -> void:
 	dati = d
+	indice_slot = slot
+	acqua_attuale = stato.get("acqua_attuale", 0.0)
+	matura = stato.get("matura", false)
+	# Sicurezza
+	if dati != null and acqua_attuale >= dati.acqua_per_crescita:
+		acqua_attuale = dati.acqua_per_crescita
+		matura = true
 
 
 func _ready() -> void:
-	# Sanity check: se dati non è stato passato, ci accorgiamo subito
 	if dati == null:
-		push_error("Pianta istanziata senza chiamare imposta_dati()!")
+		push_error("Pianta istanziata senza imposta()!")
 		return
-	
 	pulsante_annaffia.pressed.connect(_su_annaffia_premuto)
 	pulsante_raccogli.pressed.connect(_su_raccogli_premuto)
 	barra.max_value = dati.acqua_per_crescita
 	label_nome.text = dati.nome_visualizzato
 	aggiorna_visuale()
-
-
-func carica_stato(stato: Dictionary) -> void:
-	acqua_attuale = stato.get("acqua_attuale", 0.0)
-	matura = stato.get("matura", false)
-	if dati != null and acqua_attuale >= dati.acqua_per_crescita:
-		acqua_attuale = dati.acqua_per_crescita
-		matura = true
-	if is_node_ready():
-		aggiorna_visuale()
 
 
 func ottieni_stato() -> Dictionary:
@@ -72,13 +61,8 @@ func ottieni_stato() -> Dictionary:
 func applica_crescita_passiva(secondi: float) -> void:
 	if matura or dati == null:
 		return
-	var acqua_da_aggiungere: float = secondi * dati.acqua_passiva_al_secondo
-	aggiungi_acqua(acqua_da_aggiungere, false)
+	aggiungi_acqua(secondi * dati.acqua_passiva_al_secondo, false)
 
-
-# ============================================================
-# LOGICA INTERNA
-# ============================================================
 
 func _su_annaffia_premuto() -> void:
 	if matura:
@@ -111,9 +95,7 @@ func aggiungi_acqua(quantita: float, emetti_segnale: bool) -> void:
 func aggiorna_visuale() -> void:
 	if dati == null:
 		return
-	
 	barra.value = acqua_attuale
-	
 	if matura:
 		pulsante_raccogli.disabled = false
 		pulsante_annaffia.disabled = true
@@ -123,7 +105,5 @@ func aggiorna_visuale() -> void:
 		pulsante_raccogli.disabled = true
 		pulsante_annaffia.disabled = false
 		var progresso: float = acqua_attuale / dati.acqua_per_crescita
-		# Interpolazione: la pianta sfuma dal colore_base verso una versione
-		# più chiara man mano che cresce
 		sprite.color = dati.colore_base.lerp(dati.colore_maturo, progresso * 0.5)
 		sprite.scale = Vector2(0.6 + progresso * 0.6, 0.6 + progresso * 0.6)

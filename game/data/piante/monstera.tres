@@ -7,6 +7,7 @@ script = ExtResource("1_dati")
 id_pianta = "monstera"
 nome_visualizzato = "Monstera"
 descrizione = "Maestosa e paziente. Ricompensa chi sa aspettare."
+costo_sblocco = 80
 acqua_per_crescita = 180.0
 acqua_per_tap = 5.0
 acqua_passiva_al_secondo = 0.8
