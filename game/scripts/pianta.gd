@@ -2,78 +2,78 @@ extends Control
 class_name Pianta
 
 # ============================================================
-# MILESTONE 1 - Componente Pianta riutilizzabile
+# MILESTONE 1 STEP 2 - Pianta data-driven
 # ============================================================
-# Una pianta autonoma con la sua acqua, il suo stadio di
-# crescita e i suoi pulsanti. Non sa nulla del giardino:
-# comunica con l'esterno tramite SEGNALI.
-# Il giardino ascolta i segnali e gestisce semi/salvataggio.
+# La pianta non ha più costanti hardcoded: legge tutto dalla
+# risorsa `dati` (DatiPianta) che il giardino le passa prima
+# di aggiungerla all'albero.
 # ============================================================
-
-# --- COSTANTI DI BILANCIAMENTO ---
-# NOTA: in M1 step 2 queste diventeranno parametri per tipo
-# di pianta (pothos lento, pachira veloce, ecc.) caricati da
-# dati_piante.gd. Per ora restano costanti uguali per tutti.
-const ACQUA_PER_CRESCITA: float = 100.0
-const ACQUA_PER_TAP: float = 5.0
-const SEMI_PER_RACCOLTO: int = 10
-const ACQUA_PASSIVA: float = 1.0  # acqua/secondo crescita passiva
 
 # --- SEGNALI VERSO IL GIARDINO ---
-# Il giardino si iscrive a questi segnali per sapere cosa succede.
 signal raccolta_effettuata(quantita_semi: int)
-signal stato_cambiato  # generico: triggera un salvataggio
+signal stato_cambiato
+
+# --- DATI DEL TIPO (assegnati dal giardino prima di _ready) ---
+var dati: DatiPianta
 
 # --- STATO ---
 var acqua_attuale: float = 0.0
 var matura: bool = false
 
 # --- RIFERIMENTI NODI ---
-# I path sono relativi alla scena pianta.tscn
 @onready var sprite: ColorRect = $Sprite
 @onready var barra: ProgressBar = $Barra
 @onready var pulsante_annaffia: Button = $PulsanteAnnaffia
 @onready var pulsante_raccogli: Button = $PulsanteRaccogli
-
-
-func _ready() -> void:
-	pulsante_annaffia.pressed.connect(_su_annaffia_premuto)
-	pulsante_raccogli.pressed.connect(_su_raccogli_premuto)
-	barra.max_value = ACQUA_PER_CRESCITA
-	aggiorna_visuale()
+@onready var label_nome: Label = $LabelNome
 
 
 # ============================================================
 # API PUBBLICA (chiamata dal giardino)
 # ============================================================
 
-# Carica lo stato della pianta (es. dopo caricamento salvataggio)
-func carica_stato(dati: Dictionary) -> void:
-	acqua_attuale = dati.get("acqua_attuale", 0.0)
-	matura = dati.get("matura", false)
-	# Se ha più acqua della soglia, è matura (sicurezza)
-	if acqua_attuale >= ACQUA_PER_CRESCITA:
-		acqua_attuale = ACQUA_PER_CRESCITA
+# Il giardino DEVE chiamare questa prima di add_child().
+# In questo modo, quando arriva _ready(), dati è già disponibile.
+func imposta_dati(d: DatiPianta) -> void:
+	dati = d
+
+
+func _ready() -> void:
+	# Sanity check: se dati non è stato passato, ci accorgiamo subito
+	if dati == null:
+		push_error("Pianta istanziata senza chiamare imposta_dati()!")
+		return
+	
+	pulsante_annaffia.pressed.connect(_su_annaffia_premuto)
+	pulsante_raccogli.pressed.connect(_su_raccogli_premuto)
+	barra.max_value = dati.acqua_per_crescita
+	label_nome.text = dati.nome_visualizzato
+	aggiorna_visuale()
+
+
+func carica_stato(stato: Dictionary) -> void:
+	acqua_attuale = stato.get("acqua_attuale", 0.0)
+	matura = stato.get("matura", false)
+	if dati != null and acqua_attuale >= dati.acqua_per_crescita:
+		acqua_attuale = dati.acqua_per_crescita
 		matura = true
 	if is_node_ready():
 		aggiorna_visuale()
 
 
-# Restituisce lo stato della pianta per il salvataggio
 func ottieni_stato() -> Dictionary:
 	return {
+		"id_pianta": dati.id_pianta,
 		"acqua_attuale": acqua_attuale,
 		"matura": matura,
 	}
 
 
-# Applica crescita passiva (chiamata dal giardino ogni secondo
-# e anche al caricamento per recuperare il tempo offline)
 func applica_crescita_passiva(secondi: float) -> void:
-	if matura:
+	if matura or dati == null:
 		return
-	var acqua_da_aggiungere: float = secondi * ACQUA_PASSIVA
-	aggiungi_acqua(acqua_da_aggiungere, false)  # niente segnale qui, lo emette il giardino
+	var acqua_da_aggiungere: float = secondi * dati.acqua_passiva_al_secondo
+	aggiungi_acqua(acqua_da_aggiungere, false)
 
 
 # ============================================================
@@ -83,17 +83,16 @@ func applica_crescita_passiva(secondi: float) -> void:
 func _su_annaffia_premuto() -> void:
 	if matura:
 		return
-	aggiungi_acqua(ACQUA_PER_TAP, true)
+	aggiungi_acqua(dati.acqua_per_tap, true)
 
 
 func _su_raccogli_premuto() -> void:
 	if not matura:
 		return
-	# Resetta la pianta e notifica il giardino
 	matura = false
 	acqua_attuale = 0.0
 	aggiorna_visuale()
-	raccolta_effettuata.emit(SEMI_PER_RACCOLTO)
+	raccolta_effettuata.emit(dati.semi_per_raccolto)
 	stato_cambiato.emit()
 
 
@@ -101,8 +100,8 @@ func aggiungi_acqua(quantita: float, emetti_segnale: bool) -> void:
 	if matura:
 		return
 	acqua_attuale += quantita
-	if acqua_attuale >= ACQUA_PER_CRESCITA:
-		acqua_attuale = ACQUA_PER_CRESCITA
+	if acqua_attuale >= dati.acqua_per_crescita:
+		acqua_attuale = dati.acqua_per_crescita
 		matura = true
 	aggiorna_visuale()
 	if emetti_segnale:
@@ -110,15 +109,21 @@ func aggiungi_acqua(quantita: float, emetti_segnale: bool) -> void:
 
 
 func aggiorna_visuale() -> void:
+	if dati == null:
+		return
+	
 	barra.value = acqua_attuale
+	
 	if matura:
 		pulsante_raccogli.disabled = false
 		pulsante_annaffia.disabled = true
-		sprite.color = Color(0.2, 0.7, 0.2)
+		sprite.color = dati.colore_maturo
 		sprite.scale = Vector2(1.3, 1.3)
 	else:
 		pulsante_raccogli.disabled = true
 		pulsante_annaffia.disabled = false
-		var progresso: float = acqua_attuale / ACQUA_PER_CRESCITA
-		sprite.color = Color(0.4 + progresso * 0.3, 0.5 + progresso * 0.2, 0.3)
+		var progresso: float = acqua_attuale / dati.acqua_per_crescita
+		# Interpolazione: la pianta sfuma dal colore_base verso una versione
+		# più chiara man mano che cresce
+		sprite.color = dati.colore_base.lerp(dati.colore_maturo, progresso * 0.5)
 		sprite.scale = Vector2(0.6 + progresso * 0.6, 0.6 + progresso * 0.6)

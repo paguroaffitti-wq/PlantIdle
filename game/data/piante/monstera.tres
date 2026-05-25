@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DatiPianta" load_steps=2 format=3 uid="uid://b1monste1d1e001"]
+
+[ext_resource type="Script" path="res://scripts/dati_pianta.gd" id="1_dati"]
+
+[resource]
+script = ExtResource("1_dati")
+id_pianta = "monstera"
+nome_visualizzato = "Monstera"
+descrizione = "Maestosa e paziente. Ricompensa chi sa aspettare."
+acqua_per_crescita = 180.0
+acqua_per_tap = 5.0
+acqua_passiva_al_secondo = 0.8
+semi_per_raccolto = 25
+colore_base = Color(0.20, 0.45, 0.25, 1)
+colore_maturo = Color(0.10, 0.55, 0.20, 1)

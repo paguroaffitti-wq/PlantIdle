@@ -3,11 +3,11 @@
 [ext_resource type="Script" path="res://scripts/pianta.gd" id="1_pianta"]
 
 [node name="Pianta" type="Control"]
-custom_minimum_size = Vector2(140, 320)
+custom_minimum_size = Vector2(140, 360)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 140.0
-offset_bottom = 320.0
+offset_bottom = 360.0
 script = ExtResource("1_pianta")
 
 [node name="Sprite" type="ColorRect" parent="."]
@@ -42,3 +42,13 @@ offset_bottom = 305.0
 disabled = true
 text = "✂️"
 theme_override_font_sizes/font_size = 24
+
+[node name="LabelNome" type="Label" parent="."]
+offset_left = 10.0
+offset_top = 315.0
+offset_right = 130.0
+offset_bottom = 350.0
+text = "Pianta"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 18

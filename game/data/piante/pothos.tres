@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DatiPianta" load_steps=2 format=3 uid="uid://b1pothos1d1e001"]
+
+[ext_resource type="Script" path="res://scripts/dati_pianta.gd" id="1_dati"]
+
+[resource]
+script = ExtResource("1_dati")
+id_pianta = "pothos"
+nome_visualizzato = "Pothos"
+descrizione = "Cresce rapida e regala spesso. La pianta perfetta per chi inizia."
+acqua_per_crescita = 60.0
+acqua_per_tap = 5.0
+acqua_passiva_al_secondo = 1.5
+semi_per_raccolto = 8
+colore_base = Color(0.55, 0.75, 0.35, 1)
+colore_maturo = Color(0.35, 0.85, 0.30, 1)
