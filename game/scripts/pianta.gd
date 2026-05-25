@@ -2,13 +2,7 @@ extends Control
 class_name Pianta
 
 # ============================================================
-# MILESTONE 1 STEP 4 - Pianta con estetica cottagecore
-# ============================================================
-# Novità rispetto a Step 3:
-# - 3 stadi visivi distinti (germoglio / giovane / maturo)
-# - Animazione "pop" quando la pianta matura (Tween scala)
-# - Label "+N 🌱" che fluttua su e sparisce alla raccolta
-# - Vaso di terracotta come elemento separato (gestito nella scena)
+# MILESTONE 1 STEP 4 - Griglia 2 colonne (220px larghezza)
 # ============================================================
 
 signal raccolta_effettuata(quantita_semi: int)
@@ -19,7 +13,6 @@ var indice_slot: int = -1
 var acqua_attuale: float = 0.0
 var matura: bool = false
 
-# Riferimenti nodi
 @onready var foglia_base: ColorRect = $Pianta/FogliaBase
 @onready var foglia_secondaria: ColorRect = $Pianta/FogliaSecondaria
 @onready var decorazione: ColorRect = $Pianta/Decorazione
@@ -101,23 +94,16 @@ func aggiungi_acqua(quantita: float, emetti_segnale: bool) -> void:
 
 
 # ============================================================
-# VISUALE — 3 stadi
-# ============================================================
-# Stadio 0 — Germoglio  (0%–33%):  solo foglia_base piccola
-# Stadio 1 — Giovane    (33%–66%): foglia_base + foglia_secondaria
-# Stadio 2 — Maturo     (66%–100%): tutto + decorazione (fiorellino)
+# VISUALE — 3 stadi, centrati su x=110 (metà di 220px)
 # ============================================================
 
 func aggiorna_visuale() -> void:
 	if dati == null:
 		return
-
 	barra.value = acqua_attuale
 	pulsante_annaffia.disabled = matura
 	pulsante_raccogli.disabled = not matura
-
 	var progresso: float = acqua_attuale / dati.acqua_per_crescita
-
 	if matura:
 		_imposta_stadio_maturo()
 	elif progresso >= 0.66:
@@ -130,54 +116,53 @@ func aggiorna_visuale() -> void:
 
 func _imposta_stadio(stadio: int, progresso: float) -> void:
 	var colore: Color = dati.colore_base.lerp(dati.colore_maturo, progresso * 0.6)
-
 	match stadio:
-		0:  # Germoglio
+		0:  # Germoglio — pallino piccolo centrato
 			foglia_base.visible = true
 			foglia_base.color = colore
-			foglia_base.size = Vector2(30, 30)
-			foglia_base.position = Vector2(55, 60)
+			foglia_base.size = Vector2(32, 32)
+			foglia_base.position = Vector2(94, 58)
 			foglia_secondaria.visible = false
 			decorazione.visible = false
 
-		1:  # Giovane
+		1:  # Giovane — due foglie
 			foglia_base.visible = true
 			foglia_base.color = colore
-			foglia_base.size = Vector2(50, 55)
-			foglia_base.position = Vector2(45, 40)
+			foglia_base.size = Vector2(55, 60)
+			foglia_base.position = Vector2(82, 38)
 			foglia_secondaria.visible = true
 			foglia_secondaria.color = colore.darkened(0.15)
-			foglia_secondaria.size = Vector2(35, 40)
-			foglia_secondaria.position = Vector2(25, 55)
+			foglia_secondaria.size = Vector2(38, 44)
+			foglia_secondaria.position = Vector2(58, 54)
 			decorazione.visible = false
 
-		2:  # Quasi maturo
+		2:  # Quasi maturo — foglie grandi
 			foglia_base.visible = true
 			foglia_base.color = colore
-			foglia_base.size = Vector2(65, 70)
-			foglia_base.position = Vector2(37, 20)
+			foglia_base.size = Vector2(72, 76)
+			foglia_base.position = Vector2(74, 18)
 			foglia_secondaria.visible = true
 			foglia_secondaria.color = colore.darkened(0.15)
-			foglia_secondaria.size = Vector2(45, 50)
-			foglia_secondaria.position = Vector2(18, 40)
+			foglia_secondaria.size = Vector2(50, 56)
+			foglia_secondaria.position = Vector2(48, 38)
 			decorazione.visible = false
 
 
 func _imposta_stadio_maturo() -> void:
 	foglia_base.visible = true
 	foglia_base.color = dati.colore_maturo
-	foglia_base.size = Vector2(70, 75)
-	foglia_base.position = Vector2(35, 15)
+	foglia_base.size = Vector2(78, 82)
+	foglia_base.position = Vector2(71, 14)
 
 	foglia_secondaria.visible = true
 	foglia_secondaria.color = dati.colore_maturo.darkened(0.2)
-	foglia_secondaria.size = Vector2(50, 55)
-	foglia_secondaria.position = Vector2(15, 35)
+	foglia_secondaria.size = Vector2(54, 60)
+	foglia_secondaria.position = Vector2(44, 34)
 
 	decorazione.visible = true
-	decorazione.color = Color(0.95, 0.85, 0.50, 1)  # giallo caldo: fiorellino
-	decorazione.size = Vector2(18, 18)
-	decorazione.position = Vector2(75, 10)
+	decorazione.color = Color(0.95, 0.85, 0.50, 1)
+	decorazione.size = Vector2(20, 20)
+	decorazione.position = Vector2(148, 10)
 
 
 # ============================================================
@@ -185,7 +170,6 @@ func _imposta_stadio_maturo() -> void:
 # ============================================================
 
 func _anima_maturazione() -> void:
-	# Pop di scala: la foglia_base cresce a 1.25x poi torna a 1.0
 	var contenitore_pianta: Control = $Pianta
 	var tween: Tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
@@ -195,16 +179,14 @@ func _anima_maturazione() -> void:
 
 
 func _mostra_label_semi(quantita: int) -> void:
-	# Crea una Label temporanea che sale e sparisce
 	var label: Label = Label.new()
 	label.text = "+%d 🌱" % quantita
 	label.add_theme_font_size_override("font_size", 22)
 	label.add_theme_color_override("font_color", Color(0.29, 0.55, 0.16, 1.0))
-	label.position = Vector2(30, 60)
+	label.position = Vector2(70, 60)
 	add_child(label)
-
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(label, "position", Vector2(30, -10), 0.9)
+	tween.tween_property(label, "position", Vector2(70, -10), 0.9)
 	tween.tween_property(label, "modulate:a", 0.0, 0.9)
 	tween.chain().tween_callback(label.queue_free)

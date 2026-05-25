@@ -5,13 +5,11 @@
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
-; Sfondo crema caldo (#F5EFE0)
 [node name="Sfondo" type="ColorRect" parent="."]
 offset_right = 480.0
 offset_bottom = 800.0
 color = Color(0.961, 0.937, 0.878, 1)
 
-; Texture decorativa sfondo — una fascia beige più scura in alto
 [node name="FasciaAlta" type="ColorRect" parent="."]
 offset_right = 480.0
 offset_bottom = 160.0
@@ -21,7 +19,6 @@ color = Color(0.910, 0.875, 0.784, 1)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-; Header con Panel salvia arrotondato in basso
 [node name="Header" type="Panel" parent="UI"]
 offset_left = 0.0
 offset_top = 0.0
@@ -49,16 +46,21 @@ horizontal_alignment = 1
 theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.929, 0.910, 0.855, 1)
 
-; Contenitore piante
-[node name="ContenitorePiante" type="HBoxContainer" parent="UI"]
+; ScrollContainer per gestire overflow verticale con 4-6 piante
+[node name="Scroll" type="ScrollContainer" parent="UI"]
 offset_left = 10.0
 offset_top = 148.0
 offset_right = 470.0
-offset_bottom = 560.0
-alignment = 1
-theme_override_constants/separation = 6
+offset_bottom = 670.0
+horizontal_scroll_mode = 0
 
-; Pulsante shop in basso
+; GridContainer 2 colonne — si adatta automaticamente al numero di piante
+[node name="ContenitorePiante" type="GridContainer" parent="UI/Scroll"]
+size_flags_horizontal = 3
+columns = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+
 [node name="PulsanteShop" type="Button" parent="UI"]
 offset_left = 80.0
 offset_top = 690.0
