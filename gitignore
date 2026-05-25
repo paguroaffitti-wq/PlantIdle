@@ -1,37 +1,17 @@
-# Godot 4+ specific ignores
+# Godot - file temporanei generati automaticamente
 .godot/
-.import/
-export.cfg
-export_presets.cfg
+*.import
 
-# Imported translations (automatically generated)
-*.translation
-
-# Mono-specific
-.mono/
-data_*/
-mono_crash.*.json
-
-# System/IDE files
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Build outputs
-build/
-exports/
+# File di build/export
 *.apk
 *.aab
 *.ipa
+build/
+exports/
 
-# Salvataggi locali (non vanno su repository pubblica)
-user://
+# File di sistema
+.DS_Store
+Thumbs.db
+
+# Salvataggi locali
 *.save
-
-# File di backup
-*.backup
-*.bak
