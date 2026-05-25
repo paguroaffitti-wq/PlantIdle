@@ -21,7 +21,7 @@ const VASO_VUOTO_SCENA: PackedScene = preload("res://scenes/vaso_vuoto.tscn")
 var nodi_slot: Array = []
 
 @onready var contenitore_piante: HBoxContainer = $UI/ContenitorePiante
-@onready var label_semi: Label = $UI/LabelSemi
+@onready var label_semi: Label = $UI/Header/LabelSemi
 @onready var pulsante_shop: Button = $UI/PulsanteShop
 @onready var timer_crescita: Timer = $TimerCrescita
 

@@ -5,46 +5,64 @@
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
+; Sfondo crema caldo (#F5EFE0)
 [node name="Sfondo" type="ColorRect" parent="."]
 offset_right = 480.0
 offset_bottom = 800.0
-color = Color(0.85, 0.95, 0.85, 1)
+color = Color(0.961, 0.937, 0.878, 1)
+
+; Texture decorativa sfondo — una fascia beige più scura in alto
+[node name="FasciaAlta" type="ColorRect" parent="."]
+offset_right = 480.0
+offset_bottom = 160.0
+color = Color(0.910, 0.875, 0.784, 1)
 
 [node name="TimerCrescita" type="Timer" parent="."]
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="Titolo" type="Label" parent="UI"]
-offset_left = 40.0
-offset_top = 30.0
-offset_right = 440.0
-offset_bottom = 80.0
+; Header con Panel salvia arrotondato in basso
+[node name="Header" type="Panel" parent="UI"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 480.0
+offset_bottom = 135.0
+
+[node name="Titolo" type="Label" parent="UI/Header"]
+offset_left = 20.0
+offset_top = 18.0
+offset_right = 460.0
+offset_bottom = 72.0
 text = "🌿 Il tuo giardino"
 horizontal_alignment = 1
 vertical_alignment = 1
 theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.973, 0.941, 0.878, 1)
 
-[node name="LabelSemi" type="Label" parent="UI"]
-offset_left = 40.0
-offset_top = 90.0
-offset_right = 440.0
-offset_bottom = 130.0
+[node name="LabelSemi" type="Label" parent="UI/Header"]
+offset_left = 20.0
+offset_top = 78.0
+offset_right = 460.0
+offset_bottom = 118.0
 text = "🌱 Semi: 0"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.929, 0.910, 0.855, 1)
 
+; Contenitore piante
 [node name="ContenitorePiante" type="HBoxContainer" parent="UI"]
-offset_left = 20.0
-offset_top = 160.0
-offset_right = 460.0
-offset_bottom = 540.0
+offset_left = 10.0
+offset_top = 148.0
+offset_right = 470.0
+offset_bottom = 560.0
 alignment = 1
-theme_override_constants/separation = 10
+theme_override_constants/separation = 6
 
+; Pulsante shop in basso
 [node name="PulsanteShop" type="Button" parent="UI"]
-offset_left = 100.0
-offset_top = 680.0
-offset_right = 380.0
+offset_left = 80.0
+offset_top = 690.0
+offset_right = 400.0
 offset_bottom = 760.0
-text = "🛒 SHOP"
-theme_override_font_sizes/font_size = 32
+text = "🛒  Shop"
+theme_override_font_sizes/font_size = 28

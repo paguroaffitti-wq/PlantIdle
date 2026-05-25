@@ -5,79 +5,101 @@
 [node name="Shop" type="Node2D"]
 script = ExtResource("1_shop")
 
+; Sfondo beige leggermente più scuro del giardino
 [node name="Sfondo" type="ColorRect" parent="."]
 offset_right = 480.0
 offset_bottom = 800.0
-color = Color(0.95, 0.92, 0.85, 1)
+color = Color(0.910, 0.875, 0.784, 1)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="Titolo" type="Label" parent="UI"]
-offset_left = 20.0
-offset_top = 30.0
-offset_right = 460.0
-offset_bottom = 80.0
+; Header salvia come nel giardino (coerenza)
+[node name="Header" type="Panel" parent="UI"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 480.0
+offset_bottom = 120.0
+
+[node name="Titolo" type="Label" parent="UI/Header"]
+offset_left = 60.0
+offset_top = 18.0
+offset_right = 440.0
+offset_bottom = 68.0
 text = "🛒 Negozio"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.973, 0.941, 0.878, 1)
 
-[node name="LabelSemi" type="Label" parent="UI"]
-offset_left = 20.0
-offset_top = 90.0
-offset_right = 460.0
-offset_bottom = 130.0
+[node name="LabelSemi" type="Label" parent="UI/Header"]
+offset_left = 60.0
+offset_top = 72.0
+offset_right = 440.0
+offset_bottom = 110.0
 text = "🌱 Semi: 0"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.929, 0.910, 0.855, 1)
 
+; Sezione piante
 [node name="EtichettaPiante" type="Label" parent="UI"]
 offset_left = 20.0
-offset_top = 140.0
+offset_top = 134.0
 offset_right = 460.0
-offset_bottom = 175.0
-text = "Piante da sbloccare"
+offset_bottom = 165.0
+text = "🌿 Nuove piante"
 theme_override_font_sizes/font_size = 20
 
 [node name="Scroll" type="ScrollContainer" parent="UI"]
-offset_left = 20.0
-offset_top = 180.0
-offset_right = 460.0
-offset_bottom = 510.0
+offset_left = 16.0
+offset_top = 170.0
+offset_right = 464.0
+offset_bottom = 490.0
 horizontal_scroll_mode = 0
 
 [node name="ListaPiante" type="VBoxContainer" parent="UI/Scroll"]
-custom_minimum_size = Vector2(420, 0)
+custom_minimum_size = Vector2(432, 0)
 theme_override_constants/separation = 10
 
+; Separatore visivo
+[node name="Separatore" type="ColorRect" parent="UI"]
+offset_left = 20.0
+offset_top = 500.0
+offset_right = 460.0
+offset_bottom = 503.0
+color = Color(0.659, 0.471, 0.337, 0.4)
+
+; Sezione vasi
 [node name="EtichettaVasi" type="Label" parent="UI"]
 offset_left = 20.0
-offset_top = 530.0
+offset_top = 512.0
 offset_right = 460.0
-offset_bottom = 565.0
-text = "Vasi"
+offset_bottom = 543.0
+text = "🪴 Espandi il giardino"
 theme_override_font_sizes/font_size = 20
 
 [node name="LabelVasi" type="Label" parent="UI"]
 offset_left = 20.0
-offset_top = 570.0
+offset_top = 548.0
 offset_right = 460.0
-offset_bottom = 605.0
+offset_bottom = 578.0
 text = "Vasi: 3 / 6"
 theme_override_font_sizes/font_size = 16
+modulate = Color(1, 1, 1, 0.7)
 
 [node name="PulsanteCompraVaso" type="Button" parent="UI"]
 offset_left = 20.0
-offset_top = 610.0
+offset_top = 584.0
 offset_right = 460.0
-offset_bottom = 670.0
+offset_bottom = 638.0
 text = "Compra vaso"
 theme_override_font_sizes/font_size = 22
 
+; Pulsante indietro
 [node name="PulsanteIndietro" type="Button" parent="UI"]
 offset_left = 20.0
-offset_top = 700.0
+offset_top = 710.0
 offset_right = 460.0
-offset_bottom = 770.0
+offset_bottom = 772.0
 text = "← Torna al giardino"
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
