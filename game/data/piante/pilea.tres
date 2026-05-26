@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DatiPianta" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/dati_pianta.gd" id="1_datip"]
+
+[resource]
+script = ExtResource("1_datip")
+id_pianta = "pilea"
+nome_visualizzato = "Pilea"
+descrizione = "La pianta del denaro. Piccola e rotonda, porta buona fortuna."
+costo_sblocco = 450
+acqua_per_crescita = 420.0
+acqua_per_tap = 25.0
+acqua_passiva_al_secondo = 0.4
+semi_per_raccolto = 90
+colore_base = Color(0.35, 0.55, 0.22, 1)
+colore_maturo = Color(0.22, 0.65, 0.28, 1)

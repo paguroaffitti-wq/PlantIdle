@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="DatiPianta" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/dati_pianta.gd" id="1_datip"]
+
+[resource]
+script = ExtResource("1_datip")
+id_pianta = "calathea"
+nome_visualizzato = "Calathea"
+descrizione = "Foglie decorate come opere d'arte. Esigente ma bellissima."
+costo_sblocco = 280
+acqua_per_crescita = 320.0
+acqua_per_tap = 20.0
+acqua_passiva_al_secondo = 0.5
+semi_per_raccolto = 60
+colore_base = Color(0.30, 0.50, 0.28, 1)
+colore_maturo = Color(0.18, 0.42, 0.32, 1)
