@@ -1,88 +1,94 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8m1y0n3k1abc"]
+[gd_scene format=3 uid="uid://b8m1y0n3k1abc"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://cxdtwc51nc57v" path="res://scripts/main.gd" id="1_main"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=852909566]
 script = ExtResource("1_main")
 
-[node name="Sfondo" type="ColorRect" parent="."]
+[node name="Sfondo" type="ColorRect" parent="." unique_id=1942259397]
 offset_right = 480.0
 offset_bottom = 800.0
 color = Color(0.961, 0.937, 0.878, 1)
 
-[node name="FasciaAlta" type="ColorRect" parent="."]
+[node name="FasciaAlta" type="ColorRect" parent="." unique_id=696648478]
 offset_right = 480.0
 offset_bottom = 185.0
-color = Color(0.910, 0.875, 0.784, 1)
+color = Color(0.91, 0.875, 0.784, 1)
 
-[node name="TimerCrescita" type="Timer" parent="."]
+[node name="TimerCrescita" type="Timer" parent="." unique_id=1712238428]
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=836634334]
 
-[node name="Header" type="Panel" parent="UI"]
-offset_left = 0.0
-offset_top = 0.0
+[node name="Header" type="Panel" parent="UI" unique_id=1568125481]
 offset_right = 480.0
 offset_bottom = 160.0
 
-[node name="Titolo" type="Label" parent="UI/Header"]
+[node name="Titolo" type="Label" parent="UI/Header" unique_id=2099410595]
+layout_mode = 0
 offset_left = 20.0
 offset_top = 10.0
 offset_right = 460.0
-offset_bottom = 52.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.973, 0.941, 0.878, 1)
+theme_override_font_sizes/font_size = 26
 text = "🌿 Il tuo giardino"
 horizontal_alignment = 1
-vertical_alignment = 1
-theme_override_font_sizes/font_size = 26
-theme_override_colors/font_color = Color(0.973, 0.941, 0.878, 1)
 
-[node name="LabelSemi" type="Label" parent="UI/Header"]
+[node name="LabelSemi" type="Label" parent="UI/Header" unique_id=507848394]
+layout_mode = 0
 offset_left = 20.0
 offset_top = 54.0
 offset_right = 230.0
 offset_bottom = 86.0
-text = "🌱 Semi: 0"
-horizontal_alignment = 0
+theme_override_colors/font_color = Color(0.929, 0.91, 0.855, 1)
 theme_override_font_sizes/font_size = 19
-theme_override_colors/font_color = Color(0.929, 0.910, 0.855, 1)
+text = "🌱 Semi: 0"
 
-[node name="LabelLivello" type="Label" parent="UI/Header"]
+[node name="LabelLivello" type="Label" parent="UI/Header" unique_id=2015421513]
+layout_mode = 0
 offset_left = 240.0
 offset_top = 54.0
 offset_right = 460.0
 offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.973, 0.941, 0.878, 1)
+theme_override_font_sizes/font_size = 19
 text = "Lv. 1"
 horizontal_alignment = 2
-theme_override_font_sizes/font_size = 19
-theme_override_colors/font_color = Color(0.973, 0.941, 0.878, 1)
 
-[node name="BarraXP" type="ProgressBar" parent="UI/Header"]
+[node name="BarraXP" type="ProgressBar" parent="UI/Header" unique_id=721130861]
+layout_mode = 0
 offset_left = 20.0
 offset_top = 92.0
 offset_right = 460.0
 offset_bottom = 112.0
-value = 0.0
 show_percentage = false
 
-; ScrollContainer per gestire overflow verticale con 4-6 piante
-[node name="Scroll" type="ScrollContainer" parent="UI"]
+[node name="Scroll" type="ScrollContainer" parent="UI" unique_id=1975928473]
 offset_left = 10.0
 offset_top = 173.0
 offset_right = 470.0
-offset_bottom = 695.0
+offset_bottom = 658.0
 horizontal_scroll_mode = 0
 
-; GridContainer 2 colonne
-[node name="ContenitorePiante" type="GridContainer" parent="UI/Scroll"]
+[node name="ContenitorePiante" type="GridContainer" parent="UI/Scroll" unique_id=213143759]
+layout_mode = 2
 size_flags_horizontal = 3
-columns = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
+columns = 2
 
-[node name="PulsanteShop" type="Button" parent="UI"]
-offset_left = 80.0
-offset_top = 715.0
-offset_right = 400.0
-offset_bottom = 785.0
-text = "🛒  Shop"
-theme_override_font_sizes/font_size = 28
+[node name="PulsanteMissioni" type="Button" parent="UI" unique_id=2058872340]
+offset_left = 10.0
+offset_top = 672.0
+offset_right = 230.0
+offset_bottom = 730.0
+theme_override_font_sizes/font_size = 20
+text = "📋 Missioni"
+
+[node name="PulsanteShop" type="Button" parent="UI" unique_id=1839823812]
+offset_left = 240.0
+offset_top = 672.0
+offset_right = 470.0
+offset_bottom = 730.0
+theme_override_font_sizes/font_size = 20
+text = "🛒 Shop"

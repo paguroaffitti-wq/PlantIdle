@@ -1,16 +1,18 @@
-[gd_resource type="Resource" script_class="DatiPianta" load_steps=2 format=3 uid="uid://b1pothos1d1e001"]
+[gd_resource type="Resource" script_class="DatiPianta" format=3 uid="uid://cvfq841my03p2"]
 
-[ext_resource type="Script" path="res://scripts/dati_pianta.gd" id="1_dati"]
+[ext_resource type="Script" uid="uid://b5uob6jty3hl7" path="res://scripts/dati_pianta.gd" id="1_datip"]
+[ext_resource type="Texture2D" uid="uid://b6127vpf3skdy" path="res://assets/sprites/pothos_l1.png" id="2_spr"]
 
 [resource]
-script = ExtResource("1_dati")
+script = ExtResource("1_datip")
 id_pianta = "pothos"
 nome_visualizzato = "Pothos"
-descrizione = "Cresce rapida e regala spesso. La pianta perfetta per chi inizia."
-costo_sblocco = 0
+descrizione = "Resistente e generosa. Perfetta per iniziare."
 acqua_per_crescita = 60.0
-acqua_per_tap = 5.0
+acqua_per_tap = 8.0
 acqua_passiva_al_secondo = 1.5
 semi_per_raccolto = 8
-colore_base = Color(0.55, 0.75, 0.35, 1)
-colore_maturo = Color(0.35, 0.85, 0.30, 1)
+raccolte_per_livello = Array[int]([3, 6, 10])
+spritesheets = Array[Texture2D]([ExtResource("2_spr")])
+frame_per_sheet = Array[int]([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+colore_base = Color(0.35, 0.58, 0.25, 1)

@@ -1,12 +1,7 @@
 extends Node2D
 
 # ============================================================
-# MILESTONE 2 STEP 2 - Sistema livelli
-# ============================================================
-# Aggiunto rispetto a M1:
-# - LabelLivello e BarraXP nell'header mostrano Lv. e progresso XP
-# - Ascolta livello_cambiato e xp_cambiato dal singleton
-# - Animazione "pop" sul livello al level-up
+# M2 Step 3: aggiunto pulsante missioni + registra_raccolta()
 # ============================================================
 
 const TEMPO_CRESCITA_AUTO: float = 1.0
@@ -21,6 +16,7 @@ var nodi_slot: Array = []
 @onready var label_livello: Label = $UI/Header/LabelLivello
 @onready var barra_xp: ProgressBar = $UI/Header/BarraXP
 @onready var pulsante_shop: Button = $UI/PulsanteShop
+@onready var pulsante_missioni: Button = $UI/PulsanteMissioni
 @onready var timer_crescita: Timer = $TimerCrescita
 
 
@@ -28,7 +24,9 @@ func _ready() -> void:
 	ProgressoGiocatore.semi_cambiati.connect(_su_semi_cambiati)
 	ProgressoGiocatore.livello_cambiato.connect(_su_livello_cambiato)
 	ProgressoGiocatore.xp_cambiato.connect(_su_xp_cambiato)
+	ProgressoGiocatore.missioni_aggiornate.connect(_su_missioni_aggiornate)
 	pulsante_shop.pressed.connect(_su_shop_premuto)
+	pulsante_missioni.pressed.connect(_su_missioni_premuto)
 
 	ricostruisci_giardino()
 
@@ -38,6 +36,7 @@ func _ready() -> void:
 
 	aggiorna_label_semi()
 	aggiorna_ui_livello()
+	aggiorna_badge_missioni()
 
 
 func ricostruisci_giardino() -> void:
@@ -71,6 +70,7 @@ func ricostruisci_giardino() -> void:
 
 func _su_raccolta(quantita: int, _indice: int) -> void:
 	ProgressoGiocatore.aggiungi_semi(quantita)
+	ProgressoGiocatore.registra_raccolta()
 
 
 func _su_stato_cambiato(indice: int) -> void:
@@ -103,7 +103,7 @@ func aggiorna_ui_livello() -> void:
 	var xp: int = ProgressoGiocatore.xp_attuale
 	var xp_max: int = ProgressoGiocatore.xp_per_prossimo_livello()
 	if lv >= ProgressoGiocatore.LIVELLO_MAX:
-		label_livello.text = "Lv. %d  ✨ MAX" % lv
+		label_livello.text = "Lv. %d  ✨" % lv
 	else:
 		label_livello.text = "Lv. %d" % lv
 	barra_xp.max_value = xp_max
@@ -111,16 +111,36 @@ func aggiorna_ui_livello() -> void:
 
 
 func _anima_level_up() -> void:
-	# Piccolo "pop" sul label livello + flash giallo
 	var tween: Tween = create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_BACK)
 	tween.tween_property(label_livello, "scale", Vector2(1.4, 1.4), 0.15)
 	tween.tween_property(label_livello, "scale", Vector2(1.0, 1.0), 0.20)
-	# Flash colore
 	label_livello.add_theme_color_override("font_color", Color(0.95, 0.80, 0.20, 1))
 	await get_tree().create_timer(0.5).timeout
 	label_livello.remove_theme_color_override("font_color")
+
+
+# ============================================================
+# MISSIONI
+# ============================================================
+
+func _su_missioni_aggiornate() -> void:
+	aggiorna_badge_missioni()
+
+
+# Mostra un pallino arancione sul pulsante se ci sono missioni
+# completate ma non ancora ritirate.
+func aggiorna_badge_missioni() -> void:
+	var ha_premi: bool = false
+	for m in ProgressoGiocatore.missioni_oggi:
+		if m.get("completata", false) and not m.get("ritirata", false):
+			ha_premi = true
+			break
+	if ha_premi:
+		pulsante_missioni.text = "📋 Missioni  🔴"
+	else:
+		pulsante_missioni.text = "📋 Missioni"
 
 
 # ============================================================
@@ -145,13 +165,11 @@ func _su_click_vaso_vuoto(indice_slot: int) -> void:
 	var sbloccate: Array[String] = ProgressoGiocatore.lista_piante_sbloccate()
 	if sbloccate.is_empty():
 		return
-
 	var menu: PopupMenu = PopupMenu.new()
 	for i in sbloccate.size():
 		var id: String = sbloccate[i]
 		var dati: DatiPianta = ProgressoGiocatore.TUTTI_I_DATI[id]
 		menu.add_item(dati.nome_visualizzato, i)
-
 	add_child(menu)
 	menu.id_pressed.connect(func(scelta_id: int):
 		var id_scelto: String = sbloccate[scelta_id]
@@ -164,12 +182,17 @@ func _su_click_vaso_vuoto(indice_slot: int) -> void:
 
 
 # ============================================================
-# SHOP
+# NAVIGAZIONE
 # ============================================================
 
 func _su_shop_premuto() -> void:
 	ProgressoGiocatore.salva()
 	get_tree().change_scene_to_file("res://scenes/shop.tscn")
+
+
+func _su_missioni_premuto() -> void:
+	ProgressoGiocatore.salva()
+	get_tree().change_scene_to_file("res://scenes/missioni.tscn")
 
 
 # ============================================================

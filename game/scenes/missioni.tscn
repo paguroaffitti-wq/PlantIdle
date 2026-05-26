@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/missioni.gd" id="1_miss"]
+
+[node name="Missioni" type="Node2D"]
+script = ExtResource("1_miss")
+
+[node name="Sfondo" type="ColorRect" parent="."]
+offset_right = 480.0
+offset_bottom = 800.0
+color = Color(0.961, 0.937, 0.878, 1)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Header" type="Panel" parent="UI"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 480.0
+offset_bottom = 130.0
+
+[node name="Titolo" type="Label" parent="UI/Header"]
+offset_left = 20.0
+offset_top = 10.0
+offset_right = 460.0
+offset_bottom = 52.0
+text = "📋 Missioni del giorno"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.973, 0.941, 0.878, 1)
+
+[node name="LabelSemi" type="Label" parent="UI/Header"]
+offset_left = 20.0
+offset_top = 56.0
+offset_right = 240.0
+offset_bottom = 84.0
+text = "🌱 Semi: 0"
+horizontal_alignment = 0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.929, 0.910, 0.855, 1)
+
+[node name="LabelReset" type="Label" parent="UI/Header"]
+offset_left = 240.0
+offset_top = 56.0
+offset_right = 460.0
+offset_bottom = 84.0
+text = "Reset tra --h --m"
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.800, 0.780, 0.730, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="UI"]
+offset_left = 14.0
+offset_top = 144.0
+offset_right = 466.0
+offset_bottom = 700.0
+horizontal_scroll_mode = 0
+
+[node name="Contenitore" type="VBoxContainer" parent="UI/Scroll"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="PulsanteIndietro" type="Button" parent="UI"]
+offset_left = 80.0
+offset_top = 718.0
+offset_right = 400.0
+offset_bottom = 785.0
+text = "← Giardino"
+theme_override_font_sizes/font_size = 26

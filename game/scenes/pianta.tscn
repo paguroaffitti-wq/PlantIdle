@@ -15,10 +15,11 @@ script = ExtResource("1_pianta")
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 220.0
-offset_bottom = 150.0
+offset_bottom = 170.0
 pivot_offset = Vector2(110, 110)
 
 [node name="FogliaBase" type="ColorRect" parent="Pianta"]
+visible = false
 offset_left = 90.0
 offset_top = 55.0
 offset_right = 120.0
@@ -40,14 +41,6 @@ offset_top = 35.0
 offset_right = 138.0
 offset_bottom = 53.0
 color = Color(0.95, 0.85, 0.50, 1)
-
-; ---- VASO ----
-[node name="Vaso" type="Panel" parent="."]
-offset_left = 25.0
-offset_top = 118.0
-offset_right = 195.0
-offset_bottom = 170.0
-theme_type_variation = &"Vaso"
 
 ; ---- UI ----
 [node name="Barra" type="ProgressBar" parent="."]

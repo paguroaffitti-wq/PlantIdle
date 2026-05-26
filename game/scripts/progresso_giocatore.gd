@@ -1,26 +1,12 @@
 extends Node
 
 # ============================================================
-# AUTOLOAD: PROGRESSO GIOCATORE
-# ============================================================
-# Singleton che mantiene lo stato del giocatore tra le scene.
-# Accessibile da qualsiasi script come `ProgressoGiocatore` se
-# registrato come Autoload (vedi project.godot).
-#
-# Cosa contiene:
-# - Semi posseduti
-# - Livello e XP (M2 Step 2)
-# - Piante sbloccate (set di id)
-# - Numero di vasi disponibili
-# - Contenuto di ogni slot (id_pianta + stato di crescita)
-#
-# Gestisce anche il salvataggio su file.
+# AUTOLOAD: PROGRESSO GIOCATORE — save v7
 # ============================================================
 
 const FILE_SALVATAGGIO: String = "user://salvataggio.save"
-const VERSIONE_SALVATAGGIO: int = 4  # bump: aggiunto livello/xp
+const VERSIONE_SALVATAGGIO: int = 7
 
-# Tutti i tipi di pianta esistenti nel gioco.
 const TUTTI_I_DATI: Dictionary = {
 	"pothos":      preload("res://data/piante/pothos.tres"),
 	"sansevieria": preload("res://data/piante/sansevieria.tres"),
@@ -35,46 +21,50 @@ const TUTTI_I_DATI: Dictionary = {
 const COSTI_VASI: Array[int] = [0, 0, 0, 50, 150, 400]
 const MAX_VASI: int = 6
 const TIPO_INIZIALE: String = "pothos"
-
-# Livello massimo raggiungibile in M2
 const LIVELLO_MAX: int = 20
-
-# XP fissi per azioni non legate alla raccolta
 const XP_SBLOCCO_PIANTA: int = 20
 const XP_ACQUISTO_VASO: int = 15
 
+const POOL_MISSIONI: Array = [
+	{"id": "annaffia_5",       "tipo": "annaffia",      "target": 5,   "ricompensa_semi": 15, "descrizione": "Annaffia le piante 5 volte"},
+	{"id": "annaffia_10",      "tipo": "annaffia",      "target": 10,  "ricompensa_semi": 25, "descrizione": "Annaffia le piante 10 volte"},
+	{"id": "annaffia_20",      "tipo": "annaffia",      "target": 20,  "ricompensa_semi": 40, "descrizione": "Annaffia le piante 20 volte"},
+	{"id": "raccogli_1",       "tipo": "raccogli",      "target": 1,   "ricompensa_semi": 15, "descrizione": "Raccogli 1 pianta matura"},
+	{"id": "raccogli_3",       "tipo": "raccogli",      "target": 3,   "ricompensa_semi": 25, "descrizione": "Raccogli 3 piante mature"},
+	{"id": "raccogli_5",       "tipo": "raccogli",      "target": 5,   "ricompensa_semi": 40, "descrizione": "Raccogli 5 piante mature"},
+	{"id": "guadagna_semi_20", "tipo": "guadagna_semi", "target": 20,  "ricompensa_semi": 15, "descrizione": "Guadagna 20 semi oggi"},
+	{"id": "guadagna_semi_50", "tipo": "guadagna_semi", "target": 50,  "ricompensa_semi": 25, "descrizione": "Guadagna 50 semi oggi"},
+	{"id": "guadagna_semi_100","tipo": "guadagna_semi", "target": 100, "ricompensa_semi": 40, "descrizione": "Guadagna 100 semi oggi"},
+]
 
-# --- STATO ---
+const MISSIONI_PER_GIORNO: int = 3
+
 var semi: int = 0
 var livello: int = 1
 var xp_attuale: int = 0
 var piante_sbloccate: Dictionary = {}
 var numero_vasi: int = 3
 var slot_piante: Array = []
+var missioni_oggi: Array = []
+var missioni_giorno: int = 0
+var semi_oggi: int = 0
 
-# Segnali
 signal semi_cambiati(nuovi_semi: int)
 signal pianta_sbloccata(id_pianta: String)
 signal vaso_aggiunto(nuovo_totale: int)
 signal livello_cambiato(nuovo_livello: int)
 signal xp_cambiato(xp: int, xp_necessari: int)
+signal missioni_aggiornate()
 
 
 func _ready() -> void:
 	carica()
 
 
-# ============================================================
-# SISTEMA LIVELLI (M2 Step 2)
-# ============================================================
-
-# XP necessari per salire AL livello successivo.
-# Curva: 100 * livello^1.4 — cresce progressivamente.
 func xp_per_prossimo_livello() -> int:
 	return int(100.0 * pow(livello, 1.4))
 
 
-# Aggiunge XP e gestisce eventuali level-up (anche multipli).
 func aggiungi_xp(quantita: int) -> void:
 	if livello >= LIVELLO_MAX:
 		return
@@ -91,24 +81,70 @@ func aggiungi_xp(quantita: int) -> void:
 		livello_cambiato.emit(livello)
 
 
-# ============================================================
-# API SHOP
-# ============================================================
+func _giorno_attuale() -> int:
+	return int(Time.get_unix_time_from_system() / 86400)
+
+
+func controlla_reset_missioni() -> void:
+	if _giorno_attuale() != missioni_giorno:
+		_reset_missioni(_giorno_attuale())
+
+
+func _reset_missioni(giorno: int) -> void:
+	missioni_giorno = giorno
+	semi_oggi = 0
+	missioni_oggi = []
+	var pool_copia: Array = POOL_MISSIONI.duplicate()
+	pool_copia.shuffle()
+	for i in MISSIONI_PER_GIORNO:
+		var m: Dictionary = pool_copia[i].duplicate()
+		m["progresso"] = 0
+		m["completata"] = false
+		m["ritirata"] = false
+		missioni_oggi.append(m)
+	salva()
+	missioni_aggiornate.emit()
+
+
+func _avanza_missioni(tipo: String, quantita: int) -> void:
+	var cambio: bool = false
+	for m in missioni_oggi:
+		if m["tipo"] == tipo and not m["completata"]:
+			m["progresso"] = min(m["progresso"] + quantita, m["target"])
+			if m["progresso"] >= m["target"]:
+				m["completata"] = true
+			cambio = true
+	if cambio:
+		missioni_aggiornate.emit()
+
+
+func ritira_missione(indice: int) -> bool:
+	if indice < 0 or indice >= missioni_oggi.size():
+		return false
+	var m: Dictionary = missioni_oggi[indice]
+	if not m["completata"] or m["ritirata"]:
+		return false
+	m["ritirata"] = true
+	semi += m["ricompensa_semi"]
+	aggiungi_xp(m["ricompensa_semi"] / 2)
+	salva()
+	semi_cambiati.emit(semi)
+	missioni_aggiornate.emit()
+	return true
+
 
 func puoi_sbloccare_pianta(id_pianta: String) -> bool:
 	if piante_sbloccate.has(id_pianta):
 		return false
 	if not TUTTI_I_DATI.has(id_pianta):
 		return false
-	var dati: DatiPianta = TUTTI_I_DATI[id_pianta]
-	return semi >= dati.costo_sblocco
+	return semi >= TUTTI_I_DATI[id_pianta].costo_sblocco
 
 
 func sblocca_pianta(id_pianta: String) -> bool:
 	if not puoi_sbloccare_pianta(id_pianta):
 		return false
-	var dati: DatiPianta = TUTTI_I_DATI[id_pianta]
-	semi -= dati.costo_sblocco
+	semi -= TUTTI_I_DATI[id_pianta].costo_sblocco
 	piante_sbloccate[id_pianta] = true
 	aggiungi_xp(XP_SBLOCCO_PIANTA)
 	salva()
@@ -124,10 +160,10 @@ func puoi_comprare_vaso() -> bool:
 
 
 func costo_prossimo_vaso() -> int:
-	var indice_prossimo: int = numero_vasi
-	if indice_prossimo >= COSTI_VASI.size():
+	var idx: int = numero_vasi
+	if idx >= COSTI_VASI.size():
 		return 999999
-	return COSTI_VASI[indice_prossimo]
+	return COSTI_VASI[idx]
 
 
 func compra_vaso() -> bool:
@@ -143,16 +179,20 @@ func compra_vaso() -> bool:
 	return true
 
 
-# ============================================================
-# API GIARDINO
-# ============================================================
-
 func aggiungi_semi(quantita: int) -> void:
 	semi += quantita
-	# XP dalla raccolta: 1 XP ogni 4 semi (minimo 1)
-	var xp_guadagnati: int = max(1, quantita / 4)
-	aggiungi_xp(xp_guadagnati)
+	semi_oggi += quantita
+	aggiungi_xp(max(1, quantita / 4))
 	semi_cambiati.emit(semi)
+	_avanza_missioni("guadagna_semi", quantita)
+
+
+func registra_annaffiatura() -> void:
+	_avanza_missioni("annaffia", 1)
+
+
+func registra_raccolta() -> void:
+	_avanza_missioni("raccogli", 1)
 
 
 func pianta_nello_slot(indice_slot: int, id_pianta: String) -> bool:
@@ -166,6 +206,7 @@ func pianta_nello_slot(indice_slot: int, id_pianta: String) -> bool:
 		"id_pianta": id_pianta,
 		"acqua_attuale": 0.0,
 		"matura": false,
+		"raccolte_cumulative": 0,
 	}
 	salva()
 	return true
@@ -184,12 +225,6 @@ func lista_piante_sbloccate() -> Array[String]:
 	return risultato
 
 
-# ============================================================
-# SALVATAGGIO v4
-# ============================================================
-# Aggiunto rispetto a v3: "livello" e "xp_attuale"
-# ============================================================
-
 func salva() -> void:
 	var dati: Dictionary = {
 		"versione": VERSIONE_SALVATAGGIO,
@@ -200,6 +235,9 @@ func salva() -> void:
 		"piante_sbloccate": piante_sbloccate.keys(),
 		"numero_vasi": numero_vasi,
 		"slot_piante": slot_piante,
+		"missioni_giorno": missioni_giorno,
+		"missioni_oggi": missioni_oggi,
+		"semi_oggi": semi_oggi,
 	}
 	var file: FileAccess = FileAccess.open(FILE_SALVATAGGIO, FileAccess.WRITE)
 	if file:
@@ -211,14 +249,12 @@ func carica() -> void:
 	if not FileAccess.file_exists(FILE_SALVATAGGIO):
 		_inizializza_nuovo_giocatore()
 		return
-
 	var file: FileAccess = FileAccess.open(FILE_SALVATAGGIO, FileAccess.READ)
 	if not file:
 		_inizializza_nuovo_giocatore()
 		return
 	var contenuto: String = file.get_as_text()
 	file.close()
-
 	var json: JSON = JSON.new()
 	if json.parse(contenuto) != OK:
 		_inizializza_nuovo_giocatore()
@@ -227,7 +263,6 @@ func carica() -> void:
 	if typeof(dati) != TYPE_DICTIONARY:
 		_inizializza_nuovo_giocatore()
 		return
-
 	if int(dati.get("versione", 0)) != VERSIONE_SALVATAGGIO:
 		_inizializza_nuovo_giocatore()
 		return
@@ -236,6 +271,8 @@ func carica() -> void:
 	livello = int(dati.get("livello", 1))
 	xp_attuale = int(dati.get("xp_attuale", 0))
 	numero_vasi = int(dati.get("numero_vasi", 3))
+	missioni_giorno = int(dati.get("missioni_giorno", 0))
+	semi_oggi = int(dati.get("semi_oggi", 0))
 
 	piante_sbloccate = {}
 	for id in dati.get("piante_sbloccate", []):
@@ -243,8 +280,7 @@ func carica() -> void:
 			piante_sbloccate[id] = true
 
 	slot_piante = []
-	var slot_salvati: Array = dati.get("slot_piante", [])
-	for s in slot_salvati:
+	for s in dati.get("slot_piante", []):
 		var id_p: String = s.get("id_pianta", "")
 		if id_p == "" or TUTTI_I_DATI.has(id_p):
 			slot_piante.append(s)
@@ -256,10 +292,16 @@ func carica() -> void:
 	while slot_piante.size() > numero_vasi:
 		slot_piante.pop_back()
 
-	var timestamp_salvato: float = dati.get("timestamp", Time.get_unix_time_from_system())
-	var secondi_offline: float = Time.get_unix_time_from_system() - timestamp_salvato
-	if secondi_offline > 0:
-		_applica_crescita_offline(secondi_offline)
+	missioni_oggi = []
+	for m in dati.get("missioni_oggi", []):
+		missioni_oggi.append(m)
+
+	controlla_reset_missioni()
+
+	var ts: float = dati.get("timestamp", Time.get_unix_time_from_system())
+	var offline: float = Time.get_unix_time_from_system() - ts
+	if offline > 0:
+		_applica_crescita_offline(offline)
 
 
 func _inizializza_nuovo_giocatore() -> void:
@@ -269,10 +311,14 @@ func _inizializza_nuovo_giocatore() -> void:
 	numero_vasi = 3
 	piante_sbloccate = {TIPO_INIZIALE: true}
 	slot_piante = [
-		{"id_pianta": TIPO_INIZIALE, "acqua_attuale": 0.0, "matura": false},
+		{"id_pianta": TIPO_INIZIALE, "acqua_attuale": 0.0, "matura": false, "raccolte_cumulative": 0},
 		{"id_pianta": ""},
 		{"id_pianta": ""},
 	]
+	missioni_oggi = []
+	missioni_giorno = 0
+	semi_oggi = 0
+	_reset_missioni(_giorno_attuale())
 	salva()
 
 
@@ -280,16 +326,13 @@ func _applica_crescita_offline(secondi: float) -> void:
 	for i in slot_piante.size():
 		var s: Dictionary = slot_piante[i]
 		var id_p: String = s.get("id_pianta", "")
-		if id_p == "":
+		if id_p == "" or s.get("matura", false):
 			continue
-		var matura: bool = s.get("matura", false)
-		if matura:
-			continue
-		var dati: DatiPianta = TUTTI_I_DATI[id_p]
+		var d: DatiPianta = TUTTI_I_DATI[id_p]
 		var acqua: float = s.get("acqua_attuale", 0.0)
-		acqua += secondi * dati.acqua_passiva_al_secondo
-		if acqua >= dati.acqua_per_crescita:
-			acqua = dati.acqua_per_crescita
+		acqua += secondi * d.acqua_passiva_al_secondo
+		if acqua >= d.acqua_per_crescita:
+			acqua = d.acqua_per_crescita
 			s["matura"] = true
 		s["acqua_attuale"] = acqua
 		slot_piante[i] = s
